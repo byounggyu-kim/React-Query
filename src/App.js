@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DatePicker, Input, message } from "antd";
-import { QueryClientProvider, QueryClient } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import "antd/dist/antd.css";
 import Home from "./Home";
 
 function App() {
-  // const BASE_URL = "http://15.164.163.31:8000";
   const [date, setDate] = useState();
   const [inputVal, setInputVal] = useState();
   const handleChange = (value) => {
@@ -17,18 +16,21 @@ function App() {
     );
   };
 
+  const { data, isLoading, error, isError } = useQuery("movies", () =>
+    fetch("http://15.164.163.31:8000/movies")
+  );
+
   const changeInput = (e) => {
     setInputVal(e.target.value);
   };
 
-  const queryClient = new QueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <Input onChange={changeInput} value={inputVal} /> */}
-      {/* <DatePicker onChange={handleChange} format="YY-MM-DD" /> */}
+    <>
+      <Input onChange={changeInput} value={inputVal} />
+      <DatePicker onChange={handleChange} format="YY-MM-DD" />
+      날짜: {date}
       <Home />
-    </QueryClientProvider>
+    </>
   );
 }
 
