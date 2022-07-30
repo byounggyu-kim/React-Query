@@ -16,9 +16,13 @@ function App() {
     );
   };
 
-  const { data, isLoading, error, isError } = useQuery("movies", () =>
-    fetch("http://15.164.163.31:8000/movies")
-  );
+  const fetchData = () => {
+    return fetch("http://15.164.163.31:8000/movies");
+  };
+
+  const { data, isLoading, error, isError } = useQuery("movies", fetchData);
+
+  console.log(error, isError);
 
   const changeInput = (e) => {
     setInputVal(e.target.value);
