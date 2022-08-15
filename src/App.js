@@ -3,6 +3,7 @@ import { DatePicker, Input, message } from "antd";
 import { useQuery } from "@tanstack/react-query";
 import "antd/dist/antd.css";
 import Home from "./Home";
+import axios from "axios";
 
 function App() {
   const [date, setDate] = useState();
@@ -20,9 +21,23 @@ function App() {
     return fetch("http://15.164.163.31:8000/movies");
   };
 
-  const { data, isLoading, error, isError } = useQuery("movies", fetchData);
+  function usePosts() {
+    return useQuery([
+      "posts",
+      async () => {
+        const { data } = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts"
+        );
+        return data;
+      },
+    ]);
+  }
 
-  console.log(error, isError);
+  // const { data, isLoading, error, isError } = useQuery("movies", fetchData);
+
+  const data = usePosts();
+
+  console.log(data);
 
   const changeInput = (e) => {
     setInputVal(e.target.value);
